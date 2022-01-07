@@ -1,0 +1,80 @@
+<html>
+<head>
+    <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css " rel="stylesheet"/>
+</head>
+<body >
+    <table id= "myTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% for(var i=0; i<data.length; i++) { %>
+            <tr>
+                <td><%= data[i].file_upload %></td>
+                <td><%= data[i].totalamt %></td>
+
+                <td><%= data[i].totalexpense %></td>
+                <%  if(data[i].status == 1){%>
+                <td><form method="post" action ="/received">
+                <input type ="button" class="getdata" name= "received" value="received"  data-value="<%= data[i].id %>"/>
+                </form>
+                </td>
+                <% } else{%>
+                <td>
+                <form method="post" action ="/not_received">
+                    <input type ="button"  class ="notgetdata" name= "not_received"  data-value="<%= data[i].id %>" value="not_received"/>
+                    </form>
+                </td>
+                <% } %>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+
+<script>
+    $(document).off('click','.getdata').on('click','.getdata',(e)=>{
+       e.preventDefault();
+        $.ajax({
+            url:"/received",
+            type:"post",
+            data :{data:$('.getdata').attr('data-value')},
+            dataType:"json",
+            success:(da)=>{
+                alert(da);
+                window.location.reload("/");
+            }
+        })
+    })
+
+    $(document).off('click','.notgetdata').on('click','.notgetdata',()=>{
+       
+       $.ajax({
+           url:"/not_received",
+           type:"post",
+           data :{data:$('.notgetdata').attr('data-value')},
+           dataType:"json",
+           success:(da)=>{
+               alert(da);
+               window.location.reload("/");
+           }
+       })
+   })
+</script>
+</body>
+</html>
