@@ -5,7 +5,7 @@ var mymodule = require('./lib/db');
 var pool = mymodule.pool;
 var bodyParser = require('body-parser');
 var cors = require('cors');
-
+require('dotenv').config();
 var app = express();
 app.set('view engine','ejs');
 app.use(bodyParser.json());
@@ -84,4 +84,7 @@ app.post("/refresh",async(req,res)=>{
     }
 })
     
-app.listen(1000);
+app.listen(process.env.PORT,(err)=>{
+    if(err) throw err;
+    
+});
